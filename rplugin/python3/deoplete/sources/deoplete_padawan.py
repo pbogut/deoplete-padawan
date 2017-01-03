@@ -60,11 +60,11 @@ class Source(Base):
             # not at the end of line
             return cursor_col
         patterns = [
-            r'(?:.*)::$|::(?=[_a-zA-Z][_\w]*$)', # static method/prop
-            r'(?:.*)->$|->(?=[_a-zA-Z][_\w]*$)', # instance method/prop
-            r'(?:.*)\\$|\\(?=[_a-zA-Z][_\w]*$)', # namespace
-            r'(?:.*)\$$|\$(?=[_a-zA-Z][_\w]*$)', # variable
-            r'(?:.*)[_\w]+\s*?\((?=.*?)',      # method/function call
+            r'(?:.*)::$|::(?=[_a-zA-Z][_\w]*$)',  # static method/prop
+            r'(?:.*)->$|->(?=[_a-zA-Z][_\w]*$)',  # instance method/prop
+            r'(?:.*)\\$|\\(?=[_a-zA-Z][_\w]*$)',  # namespace
+            r'(?:.*)\$$|\$(?=[_a-zA-Z][_\w]*$)',  # variable
+            r'(?:.*)[_\w]+\s*?\((?=["\'].*?)',    # method/function call
         ]
         pos = self.get_patterns_position(context, patterns)
         if pos < 0:

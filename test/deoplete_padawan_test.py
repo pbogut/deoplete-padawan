@@ -34,6 +34,12 @@ class SourceTest(unittest.TestCase):
         # deoplete    '0....5....0....^ <- 15
         self.assertEqual(position, 15)
 
+    def test_get_complete_position_for_method_param_func(self):
+        position = self.source.get_complete_position(
+            {'input': 'callWithParams(array_'})
+        # deoplete    '0....5....0....5....0^ <- 21
+        self.assertEqual(position, 21)
+
     def test_get_complete_position_for_method_variable_param(self):
         position = self.source.get_complete_position(
             {'input': '          set($var'})
@@ -153,6 +159,13 @@ class SourceTest(unittest.TestCase):
         # deoplete    '0....5....0....^ <- 15
         # padawan     '1...5....0....5^ <- 16
         self.assertEqual(column, 16)
+
+    def test_get_padawan_column_for_method_param_func(self):
+        column = self.source.get_padawan_column(
+            {'input': 'callWithParams(array_'})
+        # deoplete    '0....5....0....5....0^ <- 21
+        # padawan     '1...5....0....5....0.^ <- 12
+        self.assertEqual(column, 22)
 
     def test_get_padawan_column_for_method_variable_param(self):
         column = self.source.get_padawan_column(
