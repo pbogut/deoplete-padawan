@@ -1,0 +1,6 @@
+{
+    "minimum-stability": "dev",
+    "require": {
+        "mkusher/padawan": "dev-master"
+    }
+}

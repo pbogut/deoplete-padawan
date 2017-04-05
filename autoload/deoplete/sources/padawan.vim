@@ -4,6 +4,8 @@ if (get(g:, 'deoplete#sources#padawan#loaded', 0))
   finish
 endif
 
+let s:plugin_directory = expand('<sfile>:p:h:h:h:h')
+
 let g:deoplete#sources#padawan#loaded = 1
 
 let lib_path = expand('<sfile>:p:h:h:h:h') . '/rplugin/python3/deoplete/sources/deoplete_padawan'
@@ -38,6 +40,14 @@ log_file = vim.eval('g:deoplete#sources#padawan#log_file')
 
 _padawan_server = padawan_server.Server(server_addr, server_command, log_file)
 PYTHON
+
+function! deoplete#sources#padawan#InstallServer()
+  exec "!cd " . s:plugin_directory . " && composer install"
+endfunction
+
+function! deoplete#sources#padawan#UpdateServer()
+  exec "!cd " . s:plugin_directory . " && composer update"
+endfunction
 
 function! deoplete#sources#padawan#StartServer()
   " @todo - add some feedback with information if started
