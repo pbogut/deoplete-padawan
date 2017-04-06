@@ -24,6 +24,10 @@ let g:deoplete#sources#padawan#add_parentheses =
 let g:deoplete#sources#padawan#auto_update =
       \ get(g:, 'deoplete#sources#padawan#auto_update', 0)
 
+let g:deoplete#sources#padawan#composer_command =
+      \ get(g:, 'deoplete#sources#padawan#composer_command', 'composer')
+
+
 python3 << PYTHON
 import vim
 import sys
@@ -42,11 +46,13 @@ _padawan_server = padawan_server.Server(server_addr, server_command, log_file)
 PYTHON
 
 function! deoplete#sources#padawan#InstallServer()
-  exec "!cd " . s:plugin_directory . " && composer install"
+  let l:composer = g:deoplete#sources#padawan#composer_command
+  exec "!cd " . s:plugin_directory . " && " . l:composer . " install"
 endfunction
 
 function! deoplete#sources#padawan#UpdateServer()
-  exec "!cd " . s:plugin_directory . " && composer update"
+  let l:composer = g:deoplete#sources#padawan#composer_command
+  exec "!cd " . s:plugin_directory . " && " . l:composer . " update"
 endfunction
 
 function! deoplete#sources#padawan#StartServer()
