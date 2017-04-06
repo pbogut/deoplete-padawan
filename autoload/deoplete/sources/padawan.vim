@@ -27,6 +27,10 @@ let g:deoplete#sources#padawan#auto_update =
 let g:deoplete#sources#padawan#composer_command =
       \ get(g:, 'deoplete#sources#padawan#composer_command', 'composer')
 
+if !executable(g:deoplete#sources#padawan#server_command)
+  let g:deoplete#sources#padawan#server_command = s:plugin_directory
+        \ . '/vendor/bin/padawan-server'
+endif
 
 python3 << PYTHON
 import vim
