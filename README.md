@@ -131,11 +131,12 @@ If you would like to have simpler commands, you can add them to your
 `RestartPadawan` commands.
 
 ```vim
-command! StartPadawan call deoplete#sources#padawan#StartServer()
-command! StopPadawan call deoplete#sources#padawan#StopServer()
-command! RestartPadawan call deoplete#sources#padawan#RestartServer()
-command! InstallPadawan call deoplete#sources#padawan#InstallServer()
-command! UpdatePadawan call deoplete#sources#padawan#UpdatePadawan()
+command! PadawanStart call deoplete#sources#padawan#StartServer()
+command! PadawanStop call deoplete#sources#padawan#StopServer()
+command! PadawanRestart call deoplete#sources#padawan#RestartServer()
+command! PadawanInstall call deoplete#sources#padawan#InstallServer()
+command! PadawanUpdate call deoplete#sources#padawan#UpdatePadawan()
+command! PadawanGenerate call deoplete#sources#padawan#Generate()
 ```
 
 ## Compatibility with other plugins
