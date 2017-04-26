@@ -5,6 +5,12 @@ if (get(g:, 'deoplete#sources#padawan#loaded', 0))
 endif
 
 let s:plugin_directory = expand('<sfile>:p:h:h:h:h')
+let s:server_command = s:plugin_directory . '/vendor/bin/padawan-server'
+let s:padawan_command = s:plugin_directory . '/vendor/bin/padawan'
+if !executable(s:server_command) || !executable(s:padawan_command)
+  let s:server_command = 'padawan-server'
+  let s:padawan_command = 'padawan'
+endif
 
 let g:deoplete#sources#padawan#loaded = 1
 
@@ -13,9 +19,13 @@ let lib_path = expand('<sfile>:p:h:h:h:h') . '/rplugin/python3/deoplete/sources/
 let g:deoplete#sources#padawan#server_addr =
       \ get(g:, 'deoplete#sources#padawan#server_addr', 'http://127.0.0.1:15155')
 let g:deoplete#sources#padawan#server_command =
-      \ get(g:, 'deoplete#sources#padawan#server_command', 'padawan-server')
+      \ get(g:, 'deoplete#sources#padawan#server_command', s:server_command)
+let g:deoplete#sources#padawan#padawan_command =
+      \ get(g:, 'deoplete#sources#padawan#padawan_command', s:padawan_command)
 let g:deoplete#sources#padawan#log_file =
       \ get(g:, 'deoplete#sources#padawan#log_file', '/tmp/padawan-server.log')
+let g:deoplete#sources#padawan#composer_command =
+      \ get(g:, 'deoplete#sources#padawan#composer_command', 'composer')
 
 let g:deoplete#sources#padawan#server_autostart =
       \ get(g:, 'deoplete#sources#padawan#server_autostart', 1)
@@ -24,13 +34,6 @@ let g:deoplete#sources#padawan#add_parentheses =
 let g:deoplete#sources#padawan#auto_update =
       \ get(g:, 'deoplete#sources#padawan#auto_update', 0)
 
-let g:deoplete#sources#padawan#composer_command =
-      \ get(g:, 'deoplete#sources#padawan#composer_command', 'composer')
-
-if !executable(g:deoplete#sources#padawan#server_command)
-  let g:deoplete#sources#padawan#server_command = s:plugin_directory
-        \ . '/vendor/bin/padawan-server'
-endif
 
 python3 << PYTHON
 import vim
