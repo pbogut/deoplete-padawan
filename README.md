@@ -124,11 +124,16 @@ Will install padawan.php server.
 
 Will update padawan.php server.
 
+- `call deoplete#sources#padawan#Generate()`
+
+Will generate index file for current project. Command will run as neovim job,
+if you would like to see the output you can pass 1 as an argument to this
+function.
+
 ### Custom commands
 
 If you would like to have simpler commands, you can add them to your
-`vimrc` file. Snippet below shows how to add `StartPadawan`, `StopPadawan` and
-`RestartPadawan` commands.
+`vimrc` file. Snippet below shows how to add commands.
 
 ```vim
 command! PadawanStart call deoplete#sources#padawan#StartServer()
@@ -136,7 +141,7 @@ command! PadawanStop call deoplete#sources#padawan#StopServer()
 command! PadawanRestart call deoplete#sources#padawan#RestartServer()
 command! PadawanInstall call deoplete#sources#padawan#InstallServer()
 command! PadawanUpdate call deoplete#sources#padawan#UpdatePadawan()
-command! PadawanGenerate call deoplete#sources#padawan#Generate()
+command! -bang PadawanGenerate call deoplete#sources#padawan#Generate(<bang>0)
 ```
 
 ## Compatibility with other plugins

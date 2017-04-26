@@ -79,7 +79,7 @@ function! deoplete#sources#padawan#RestartServer()
   python3 _padawan_server.restart()
 endfunction
 
-function! deoplete#sources#padawan#Generate()
+function! deoplete#sources#padawan#Generate(...)
   if empty(get(b:, 'padawan_project_root', 0))
 python3 << PYTHON
 file_name = vim.eval('expand("%:p")')
@@ -90,10 +90,15 @@ PYTHON
   endif
   if confirm("Are you sure you want to generate index in "
         \. b:padawan_project_root . "?", "&Yes\n&No", 2) == 1
-    call jobstart("cd " . b:padawan_project_root . " && "
-          \. g:deoplete#sources#padawan#padawan_command . " generate", {
-          \'on_exit': function('s:generate_exit'),
-          \'on_stdout': function('s:generate_stdout')})
+    let cmd = "cd " . b:padawan_project_root . " && "
+          \. g:deoplete#sources#padawan#padawan_command . " generate"
+    if get(a:, 1, 0)
+      exec "!" . l:cmd
+    else
+      call jobstart(l:cmd, {
+            \'on_exit': function('s:generate_exit'),
+            \'on_stdout': function('s:generate_stdout')})
+    endif
   endif
 endfunction
 
