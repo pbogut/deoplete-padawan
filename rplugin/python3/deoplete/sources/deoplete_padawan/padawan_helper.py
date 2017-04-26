@@ -4,6 +4,7 @@
 # =============================================================================
 from os import path
 
+
 class Helper:
 
     def get_project_root(self, file_path):
@@ -17,4 +18,3 @@ class Helper:
             current_path = path.dirname(file_path)
 
         return current_path
-
