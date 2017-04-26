@@ -44,12 +44,14 @@ lib_path = vim.eval('lib_path')
 sys.path.insert(0, os.path.join(lib_path))
 
 import padawan_server
+import padawan_helper
 
 server_addr = vim.eval('g:deoplete#sources#padawan#server_addr')
 server_command = vim.eval('g:deoplete#sources#padawan#server_command')
 log_file = vim.eval('g:deoplete#sources#padawan#log_file')
 
 _padawan_server = padawan_server.Server(server_addr, server_command, log_file)
+_padawan_helper = padawan_helper.Helper()
 PYTHON
 
 function! deoplete#sources#padawan#InstallServer()
@@ -75,4 +77,34 @@ endfunction
 function! deoplete#sources#padawan#RestartServer()
   " @todo - add some feedback with information if restarted
   python3 _padawan_server.restart()
+endfunction
+
+function! deoplete#sources#padawan#Generate()
+  if empty(get(b:, 'padawan_project_root', 0))
+python3 << PYTHON
+file_name = vim.eval('expand("%:p")')
+vim.command("let b:padawan_project_root = '{}'".format(
+    _padawan_helper.get_project_root(file_name))
+)
+PYTHON
+  endif
+  if confirm("Are you sure you want to generate index in "
+        \. b:padawan_project_root . "?", "&Yes\n&No", 2) == 1
+    call jobstart("cd " . b:padawan_project_root . " && "
+          \. g:deoplete#sources#padawan#padawan_command . " generate", {
+          \'on_exit': function('s:generate_exit'),
+          \'on_stdout': function('s:generate_stdout')})
+  endif
+endfunction
+
+function! s:generate_stdout(id, out, ...)
+  for l:line in a:out
+    if l:line =~ 'Progress:'
+      echo l:line
+    endif
+  endfor
+endfunction
+
+function! s:generate_exit(...)
+  echo "Padawan.php: Index generating has finished!"
 endfunction

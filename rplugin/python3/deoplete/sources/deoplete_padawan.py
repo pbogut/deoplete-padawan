@@ -16,6 +16,7 @@ import re
 sys.path.insert(1, path.dirname(__file__) + '/deoplete_padawan')
 
 import padawan_server  # noqa
+import padawan_helper  # noqa
 
 
 class Source(Base):
@@ -23,6 +24,7 @@ class Source(Base):
     def __init__(self, vim):
         Base.__init__(self, vim)
 
+        self.helper = padawan_helper.Helper()
         self.name = 'padawan'
         self.mark = '[padawan]'
         self.filetypes = ['php']
@@ -50,7 +52,7 @@ class Source(Base):
     def on_event(self, context):
         if (context['event'] == 'BufWritePost' and self.auto_update == 1):
             file_path = self.current.buffer.name
-            current_path = self.get_project_root(file_path)
+            current_path = self.helper.get_project_root(file_path)
             params = {
                 'path': current_path
             }
@@ -89,7 +91,7 @@ class Source(Base):
 
     def gather_candidates(self, context):
         file_path = self.current.buffer.name
-        current_path = self.get_project_root(file_path)
+        current_path = self.helper.get_project_root(file_path)
 
         [line_num, _] = self.current.window.cursor
         column_num = self.get_padawan_column(context)
@@ -168,15 +170,3 @@ class Source(Base):
             self.vim.command("echom 'Padawan.php error: {}'".format(error))
         # any other error can bouble to deoplete
         return False
-
-    def get_project_root(self, file_path):
-        current_path = path.dirname(file_path)
-        while current_path != '/' and not path.exists(
-                path.join(current_path, 'composer.json')
-        ):
-            current_path = path.dirname(current_path)
-
-        if current_path == '/':
-            current_path = path.dirname(file_path)
-
-        return current_path
