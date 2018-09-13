@@ -33,18 +33,20 @@ class Source(Base):
                              r'\w\([\'"][^\)]*|\w\(\w*|\\\w*|\$\w*'
         self.current = vim.current
         self.vim = vim
+     
+    def init_vars(self, var, default):
+        defined = self.vim.eval('exists("g:' + var + '")')
+        if defined:
+            return self.vim.eval('g:' + var)
+        else:
+            return default
 
     def on_init(self, context):
-        server_addr = self.vim.eval(
-            'deoplete#sources#padawan#server_addr')
-        server_command = self.vim.eval(
-            'deoplete#sources#padawan#server_command')
-        log_file = self.vim.eval(
-            'deoplete#sources#padawan#log_file')
-        self.add_parentheses = self.vim.eval(
-            'deoplete#sources#padawan#add_parentheses')
-        self.auto_update = self.vim.eval(
-            'deoplete#sources#padawan#auto_update')
+        server_addr = self.init_vars('deoplete#sources#padawan#server_addr', 'http://127.0.0.1:15155')
+        server_command = self.init_vars('deoplete#sources#padawan#server_command', 'padawan-server')
+        log_file = self.init_vars('deoplete#sources#padawan#log_file', '/tmp/padawan-server.log')
+        self.add_parentheses = self.init_vars('deoplete#sources#padawan#add_parentheses', 0)
+        self.auto_update = self.init_vars('deoplete#sources#padawan#auto_update', 0)
 
         self.server = padawan_server.Server(server_addr, server_command,
                                             log_file)
